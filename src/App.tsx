@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import './App.css'
+import Chat from './components/Chat'
 
 function App() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <div className="container">
       <header>
@@ -18,7 +22,7 @@ function App() {
           </p>
         </div>
         
-        <button className="cta-button">
+        <button className="cta-button" onClick={() => setIsChatOpen(true)}>
           Start Your Reading
         </button>
       </main>
@@ -28,6 +32,8 @@ function App() {
           For entertainment purposes only. The future is yours to create.
         </p>
       </footer>
+
+      {isChatOpen && <Chat onClose={() => setIsChatOpen(false)} />}
     </div>
   )
 }
