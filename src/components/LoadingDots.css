@@ -1,0 +1,49 @@
+.thinking-bubble {
+  background: #f0f0f0;
+  padding: 16px 24px;
+  border-radius: 16px;
+  display: inline-block;
+  align-self: flex-start;
+  margin-left: 4px;
+}
+
+.dot-flashing {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: #666;
+  animation: dot-flashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+
+.dot-flashing::before, .dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: #666;
+  animation: dot-flashing 1s infinite alternate;
+}
+
+.dot-flashing::before {
+  left: -10px;
+  animation-delay: 0s;
+}
+
+.dot-flashing::after {
+  left: 10px;
+  animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+  0% {
+    background-color: #666;
+  }
+  50%, 100% {
+    background-color: #ccc;
+  }
+}

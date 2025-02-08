@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import StreamingText from './StreamingText';
+import LoadingDots from './LoadingDots';
 
 interface Message {
   text: string;
@@ -17,18 +18,21 @@ const botResponse = "I sense a shifting in the ethereal planes... The cosmic win
 function Chat({ onClose }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasAsked, setHasAsked] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
 
   const handleQuestionClick = () => {
     setMessages(prev => [...prev, { text: predefinedQuestion, isUser: true, id: Date.now() }]);
     setHasAsked(true);
+    setIsThinking(true);
     
     setTimeout(() => {
+      setIsThinking(false);
       setMessages(msgs => [...msgs, { 
         text: botResponse,
         isUser: false,
         id: Date.now()
       }]);
-    }, 1000);
+    }, 2000);
   };
 
   return (
@@ -43,6 +47,7 @@ function Chat({ onClose }: ChatProps) {
             {msg.isUser ? msg.text : <StreamingText key={msg.id} text={msg.text} speed={25} />}
           </div>
         ))}
+        {isThinking && <LoadingDots />}
       </div>
       <div className="questions-container">
         <button
