@@ -40,7 +40,7 @@ function Chat({ onClose }: ChatProps) {
       <div className="messages">
         {messages.map((msg) => (
           <div key={msg.id} className={`message ${msg.isUser ? 'user' : 'bot'}`}>
-            {msg.isUser ? msg.text : <StreamingText key={msg.id} text={msg.text} speed={40} />}
+            {msg.isUser ? msg.text : <StreamingText key={msg.id} text={msg.text} speed={25} />}
           </div>
         ))}
       </div>
