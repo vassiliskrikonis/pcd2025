@@ -15,6 +15,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -30,10 +36,26 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background: linear-gradient(135deg, #1a1a1a 0%, #2a1a3a 100%);
+  width: 100%;
+  overscroll-behavior: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: fixed;
+  inset: 0;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: clamp(2rem, 5vw, 3.2em);
   line-height: 1.1;
   font-family: 'Cinzel', serif;
 }
@@ -67,5 +89,21 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    font-size: 95%;
+  }
+
+  button {
+    padding: 0.5em 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    font-size: 90%;
   }
 }
