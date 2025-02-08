@@ -40,3 +40,62 @@
 .read-the-docs {
   color: #888;
 }
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+header {
+  margin-bottom: 3rem;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 1.2rem;
+}
+
+.crystal-ball {
+  font-size: 8rem;
+  margin: 2rem 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+.description {
+  margin: 2rem 0;
+}
+
+.cta-button {
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #646cff 0%, #535bf2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
+
+.disclaimer {
+  margin-top: 3rem;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

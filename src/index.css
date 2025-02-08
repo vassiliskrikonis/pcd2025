@@ -25,9 +25,9 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a1a3a 100%);
 }
 
 h1 {
