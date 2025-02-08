@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import StreamingText from './StreamingText';
 
 interface Message {
   text: string;
   isUser: boolean;
+  id: number;  // Add an id to force re-render of TypewriterText
 }
 
 interface ChatProps {
@@ -17,14 +19,15 @@ function Chat({ onClose }: ChatProps) {
     e.preventDefault();
     if (!input.trim()) return;
     
-    setMessages([...messages, { text: input, isUser: true }]);
+    setMessages([...messages, { text: input, isUser: true, id: Date.now() }]);
     setInput('');
     
     // Simulate AI response
     setTimeout(() => {
       setMessages(msgs => [...msgs, { 
         text: "I sense great possibilities in your future... 🔮", 
-        isUser: false 
+        isUser: false,
+        id: Date.now()
       }]);
     }, 1000);
   };
@@ -36,9 +39,9 @@ function Chat({ onClose }: ChatProps) {
         <button className="close-button" onClick={onClose}>×</button>
       </div>
       <div className="messages">
-        {messages.map((msg, i) => (
-          <div key={i} className={`message ${msg.isUser ? 'user' : 'bot'}`}>
-            {msg.text}
+        {messages.map((msg) => (
+          <div key={msg.id} className={`message ${msg.isUser ? 'user' : 'bot'}`}>
+            {msg.isUser ? msg.text : <StreamingText key={msg.id} text={msg.text} speed={40} />}
           </div>
         ))}
       </div>

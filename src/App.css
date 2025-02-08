@@ -202,6 +202,8 @@ header h1 {
   align-self: flex-start;
 }
 
+/* Remove the typewriter cursor styles since we're not using them anymore */
+
 .input-form {
   display: flex;
   padding: 1rem;
