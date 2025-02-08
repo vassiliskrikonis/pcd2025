@@ -52,8 +52,14 @@ header {
   margin-bottom: 3rem;
 }
 
+header h1 {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(100, 108, 255, 0.5);
+  font-weight: 700;
+}
+
 .subtitle {
-  color: #888;
+  color: #bbb;
   font-size: 1.2rem;
 }
 
@@ -65,6 +71,12 @@ header {
 
 .description {
   margin: 2rem 0;
+}
+
+.description h2 {
+  color: #fff;
+  text-shadow: 0 0 15px rgba(100, 108, 255, 0.4);
+  font-weight: 700;
 }
 
 .cta-button {
