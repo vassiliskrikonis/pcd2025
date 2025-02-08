@@ -4,28 +4,27 @@ import StreamingText from './StreamingText';
 interface Message {
   text: string;
   isUser: boolean;
-  id: number;  // Add an id to force re-render of TypewriterText
+  id: number;
 }
 
 interface ChatProps {
   onClose: () => void;
 }
 
+const predefinedQuestion = "What do the cosmic energies reveal?";
+const botResponse = "I sense a shifting in the ethereal planes... The cosmic winds whisper of transformative energies aligning in your realm. Ancient wisdom suggests remaining receptive to the subtle vibrations that guide your path... 🔮";
+
 function Chat({ onClose }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
+  const [hasAsked, setHasAsked] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const handleQuestionClick = () => {
+    setMessages(prev => [...prev, { text: predefinedQuestion, isUser: true, id: Date.now() }]);
+    setHasAsked(true);
     
-    setMessages([...messages, { text: input, isUser: true, id: Date.now() }]);
-    setInput('');
-    
-    // Simulate AI response
     setTimeout(() => {
       setMessages(msgs => [...msgs, { 
-        text: "I sense great possibilities in your future... 🔮", 
+        text: botResponse,
         isUser: false,
         id: Date.now()
       }]);
@@ -45,15 +44,15 @@ function Chat({ onClose }: ChatProps) {
           </div>
         ))}
       </div>
-      <form onSubmit={handleSubmit} className="input-form">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about your future..."
-        />
-        <button type="submit">Send</button>
-      </form>
+      <div className="questions-container">
+        <button
+          onClick={handleQuestionClick}
+          className={`question-button ${hasAsked ? 'asked' : ''}`}
+          disabled={hasAsked}
+        >
+          {predefinedQuestion}
+        </button>
+      </div>
     </div>
   );
 }

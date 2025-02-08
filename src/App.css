@@ -228,6 +228,43 @@ header h1 {
   cursor: pointer;
 }
 
+.questions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  background: #f8f8f8;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.question-button {
+  background: white;
+  border: 1px solid #646cff;
+  color: #646cff;
+  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-size: 0.9rem;
+  white-space: normal;
+}
+
+.question-button:hover:not(:disabled) {
+  background: #646cff;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.question-button.asked {
+  background: #f0f0f0;
+  border-color: #ddd;
+  color: #999;
+  cursor: not-allowed;
+}
+
 /* Make chat interface responsive on mobile */
 @media (max-width: 480px) {
   .chat-interface {
@@ -281,6 +318,16 @@ header h1 {
   .input-form button {
     padding: 0.5rem 0.8rem;
     font-size: 0.95rem;
+  }
+
+  .questions-container {
+    max-height: 180px;
+    padding: 0.75rem;
+  }
+
+  .question-button {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
   }
 }
 
