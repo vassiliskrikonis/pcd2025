@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StreamingText from './StreamingText';
 import LoadingDots from './LoadingDots';
+import horoscopeCSV from '../assets/horoscope.csv?raw';
 
 interface Message {
   text: string;
@@ -12,13 +13,38 @@ interface ChatProps {
   onClose: () => void;
 }
 
+// Simplify the interface to only include description
+interface HoroscopeEntry {
+  description: string;
+}
+
 const predefinedQuestion = "What do the cosmic energies reveal?";
-const botResponse = "I sense a shifting in the ethereal planes... The cosmic winds whisper of transformative energies aligning in your realm. Ancient wisdom suggests remaining receptive to the subtle vibrations that guide your path... 🔮";
 
 function Chat({ onClose }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasAsked, setHasAsked] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
+  const [horoscopeData, setHoroscopeData] = useState<HoroscopeEntry[]>([]);
+
+  useEffect(() => {
+    const csvText = horoscopeCSV;
+    const rows = csvText.split('\n');
+    const headers = rows[0].split(',');
+    const descriptionIndex = 2; // description is the third column (index 2)
+    
+    const data = rows.slice(1).map(row => {
+      // Split by comma but respect quotes
+      const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(val => val.replace(/^"|"$/g, ''));
+      return { description: values[descriptionIndex] };
+    });
+    setHoroscopeData(data);
+  }, []);
+
+  const getRandomHoroscopeDescription = () => {
+    if (horoscopeData.length === 0) return "The cosmic energies are currently aligning... Please try again in a moment. 🔮";
+    const randomIndex = Math.floor(Math.random() * horoscopeData.length);
+    return `${horoscopeData[randomIndex].description} 🔮`;
+  };
 
   const handleQuestionClick = () => {
     setMessages(prev => [...prev, { text: predefinedQuestion, isUser: true, id: Date.now() }]);
@@ -28,7 +54,7 @@ function Chat({ onClose }: ChatProps) {
     setTimeout(() => {
       setIsThinking(false);
       setMessages(msgs => [...msgs, { 
-        text: botResponse,
+        text: getRandomHoroscopeDescription(),
         isUser: false,
         id: Date.now()
       }]);
