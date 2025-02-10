@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import StreamingText from './StreamingText';
 import LoadingDots from './LoadingDots';
 import horoscopeCSV from '../assets/horoscope.csv?raw';
@@ -11,6 +11,9 @@ interface Message {
 
 interface ChatProps {
   onClose: () => void;
+  setShowZoltar: (visible: boolean) => void;
+  showZoltar: boolean;
+  canStartStreaming: boolean;
 }
 
 // Simplify the interface to only include description
@@ -20,21 +23,21 @@ interface HoroscopeEntry {
 
 const predefinedQuestion = "What do the cosmic energies reveal?";
 
-function Chat({ onClose }: ChatProps) {
+function Chat({ onClose, setShowZoltar, showZoltar, canStartStreaming }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasAsked, setHasAsked] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [horoscopeData, setHoroscopeData] = useState<HoroscopeEntry[]>([]);
+  const modelLoadedRef = useRef(false);
 
   useEffect(() => {
     const csvText = horoscopeCSV;
     const rows = csvText.split('\n');
-    const headers = rows[0].split(',');
     const descriptionIndex = 2; // description is the third column (index 2)
     
     const data = rows.slice(1).map(row => {
       // Split by comma but respect quotes
-      const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(val => val.replace(/^"|"$/g, ''));
+      const values = row.split(/,(?=(?:(?:[^\"]*\"){2})*[^\"]*$)/).map(val => val.replace(/^\"|\"$/g, ''));
       return { description: values[descriptionIndex] };
     });
     setHoroscopeData(data);
@@ -50,19 +53,22 @@ function Chat({ onClose }: ChatProps) {
     setMessages(prev => [...prev, { text: predefinedQuestion, isUser: true, id: Date.now() }]);
     setHasAsked(true);
     setIsThinking(true);
-    
-    setTimeout(() => {
+    setShowZoltar(true); // Start loading Zoltar when question is asked
+  };
+
+  useEffect(() => {
+    if (canStartStreaming) {
       setIsThinking(false);
       setMessages(msgs => [...msgs, { 
         text: getRandomHoroscopeDescription(),
         isUser: false,
         id: Date.now()
       }]);
-    }, 2000);
-  };
+    }
+  }, [canStartStreaming]);
 
   return (
-    <div className="chat-interface">
+    <div className="chat-interface" style={{ zIndex: 10 }}>
       <div className="chat-header">
         <h3>FutureSight AI</h3>
         <button className="close-button" onClick={onClose}>×</button>

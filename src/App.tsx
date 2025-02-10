@@ -1,9 +1,16 @@
-import { useState } from 'react'
-import './App.css'
-import Chat from './components/Chat'
+import { useState } from 'react';
+import './App.css';
+import Chat from './components/Chat';
+import ZoltarScene from './components/ZoltarScene';
 
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showZoltar, setShowZoltar] = useState(false);
+  const [canStartStreaming, setCanStartStreaming] = useState(false);
+
+  const handleModelStart = () => {
+    setCanStartStreaming(true);
+  };
 
   return (
     <div className="container">
@@ -33,9 +40,10 @@ function App() {
         </p>
       </footer>
 
-      {isChatOpen && <Chat onClose={() => setIsChatOpen(false)} />}
+      {isChatOpen && <Chat onClose={() => setIsChatOpen(false)} setShowZoltar={setShowZoltar} showZoltar={showZoltar} canStartStreaming={canStartStreaming} />}
+      {showZoltar && <ZoltarScene visible={showZoltar} onModelStart={handleModelStart} />}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
