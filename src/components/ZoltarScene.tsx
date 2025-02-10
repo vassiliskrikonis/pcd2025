@@ -17,6 +17,10 @@ function Model({ onLoaded, mousePosition }: { onLoaded: () => void; mousePositio
   const hasTriggeredCallback = useRef(false);
   const FADE_DURATION = 6; // Duration in seconds
 
+  const handleClick = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
+  };
+
   useEffect(() => {
     scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -75,6 +79,7 @@ function Model({ onLoaded, mousePosition }: { onLoaded: () => void; mousePositio
       scale={2}
       position={[0, -2, -2]}
       rotation={[0, -Math.PI / 4 + Math.PI / 18, 0]} // Restore initial rotation
+      onClick={handleClick}
     />
   );
 }
@@ -121,7 +126,7 @@ export default function ZoltarScene({ visible, onModelStart }: Props) {
       left: 0,
       width: '100%',
       height: '100%',
-      pointerEvents: 'none',
+      pointerEvents: visible ? 'auto' : 'none', // Enable pointer events when visible
       zIndex: 1
     }}>
       {visible && (
