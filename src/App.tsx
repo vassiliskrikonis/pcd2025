@@ -12,6 +12,12 @@ function App() {
     setCanStartStreaming(true);
   };
 
+  const handleModelClick = () => {
+    if (!isChatOpen) {
+      setIsChatOpen(true);
+    }
+  };
+
   return (
     <div className="container">
       <header>
@@ -40,8 +46,21 @@ function App() {
         </p>
       </footer>
 
-      {isChatOpen && <Chat onClose={() => setIsChatOpen(false)} setShowZoltar={setShowZoltar} showZoltar={showZoltar} canStartStreaming={canStartStreaming} />}
-      {showZoltar && <ZoltarScene visible={showZoltar} onModelStart={handleModelStart} />}
+      {isChatOpen && (
+        <Chat 
+          onClose={() => setIsChatOpen(false)} 
+          setShowZoltar={setShowZoltar} 
+          showZoltar={showZoltar} 
+          canStartStreaming={canStartStreaming} 
+        />
+      )}
+      {showZoltar && (
+        <ZoltarScene 
+          visible={showZoltar} 
+          onModelStart={handleModelStart}
+          onModelClick={handleModelClick}
+        />
+      )}
     </div>
   );
 }

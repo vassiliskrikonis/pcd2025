@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import StreamingText from './StreamingText';
 import LoadingDots from './LoadingDots';
 import horoscopeCSV from '../assets/horoscope.csv?raw';
@@ -28,7 +28,15 @@ function Chat({ onClose, setShowZoltar, showZoltar, canStartStreaming }: ChatPro
   const [hasAsked, setHasAsked] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [horoscopeData, setHoroscopeData] = useState<HoroscopeEntry[]>([]);
-  const modelLoadedRef = useRef(false);
+  const [shouldShowResponse, setShouldShowResponse] = useState(false);
+
+  // Reset states when chat is reopened
+  useEffect(() => {
+    setMessages([]);
+    setHasAsked(false);
+    setIsThinking(false);
+    setShouldShowResponse(false);
+  }, []);
 
   useEffect(() => {
     const csvText = horoscopeCSV;
@@ -53,11 +61,20 @@ function Chat({ onClose, setShowZoltar, showZoltar, canStartStreaming }: ChatPro
     setMessages(prev => [...prev, { text: predefinedQuestion, isUser: true, id: Date.now() }]);
     setHasAsked(true);
     setIsThinking(true);
-    setShowZoltar(true); // Start loading Zoltar when question is asked
+    
+    // Only show loading for 1 second if model is already loaded
+    setTimeout(() => {
+      setIsThinking(false);
+      setShouldShowResponse(true);
+    }, 1000);
+
+    if (!showZoltar) {
+      setShowZoltar(true);
+    }
   };
 
   useEffect(() => {
-    if (canStartStreaming) {
+    if (canStartStreaming && hasAsked) {  // Only add bot message if user has asked the question
       setIsThinking(false);
       setMessages(msgs => [...msgs, { 
         text: getRandomHoroscopeDescription(),
@@ -65,7 +82,7 @@ function Chat({ onClose, setShowZoltar, showZoltar, canStartStreaming }: ChatPro
         id: Date.now()
       }]);
     }
-  }, [canStartStreaming]);
+  }, [canStartStreaming, hasAsked]);  // Add hasAsked to dependencies
 
   return (
     <div className="chat-interface" style={{ zIndex: 10 }}>
@@ -76,7 +93,9 @@ function Chat({ onClose, setShowZoltar, showZoltar, canStartStreaming }: ChatPro
       <div className="messages">
         {messages.map((msg) => (
           <div key={msg.id} className={`message ${msg.isUser ? 'user' : 'bot'}`}>
-            {msg.isUser ? msg.text : <StreamingText key={msg.id} text={msg.text} speed={25} />}
+            {msg.isUser ? msg.text : (
+              shouldShowResponse && <StreamingText key={msg.id} text={msg.text} speed={25} />
+            )}
           </div>
         ))}
         {isThinking && <LoadingDots />}

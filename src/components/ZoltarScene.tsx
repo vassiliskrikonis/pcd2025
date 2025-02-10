@@ -9,6 +9,7 @@ const MODEL_URL = '/models/Zoltar Machine.glb';
 interface Props {
   visible: boolean;
   onModelStart?: () => void;
+  onModelClick?: () => void;  // Add new prop
 }
 
 function Model({ onLoaded, mousePosition }: { onLoaded: () => void; mousePosition: THREE.Vector2 }) {
@@ -19,6 +20,7 @@ function Model({ onLoaded, mousePosition }: { onLoaded: () => void; mousePositio
 
   const handleClick = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
+    // Remove the empty click handler - we'll handle clicks at the Canvas level
   };
 
   useEffect(() => {
@@ -96,7 +98,7 @@ function CameraRig({ mousePosition }: { mousePosition: THREE.Vector2 }) {
   return null;
 }
 
-export default function ZoltarScene({ visible, onModelStart }: Props) {
+export default function ZoltarScene({ visible, onModelStart, onModelClick }: Props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isFadingIn, setIsFadingIn] = useState(false);
   const [mousePosition, setMousePosition] = useState(new THREE.Vector2(0.5, 0.5));
@@ -126,9 +128,12 @@ export default function ZoltarScene({ visible, onModelStart }: Props) {
       left: 0,
       width: '100%',
       height: '100%',
-      pointerEvents: visible ? 'auto' : 'none', // Enable pointer events when visible
-      zIndex: 1
-    }}>
+      pointerEvents: visible ? 'auto' : 'none',
+      zIndex: 1,
+      cursor: 'pointer'  // Add pointer cursor
+    }}
+    onClick={onModelClick}  // Add click handler
+    >
       {visible && (
         <>
           <div style={{
@@ -150,7 +155,7 @@ export default function ZoltarScene({ visible, onModelStart }: Props) {
             opacity: isFadingIn ? 1 : 0,
             transition: 'opacity 6s cubic-bezier(0.42, 0, 1, 1)',
           }}>
-            <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+            <Canvas camera={{ position: [0, 0, 5], fov: 45 }} onClick={onModelClick}>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.5} />
                 <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={3} color="#ffcc99" />
