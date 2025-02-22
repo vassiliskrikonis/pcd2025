@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, Center, Environment, Preload } from '@react-three/drei';
+import { useGLTF, Center, Preload } from '@react-three/drei';
 import { EffectComposer, Bloom, DepthOfField, Vignette, ChromaticAberration } from '@react-three/postprocessing';
 import * as THREE from 'three';
 
@@ -157,7 +157,7 @@ export default function ZoltarScene({ visible, onModelStart, onModelClick }: Pro
           }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }} onClick={onModelClick}>
               <Suspense fallback={null}>
-                <ambientLight intensity={0.5} />
+                <ambientLight intensity={2} />
                 <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={3} color="#ffcc99" />
                 <spotLight position={[-10, 10, -10]} angle={0.3} penumbra={1} intensity={2} color="#99ccff" />
                 <spotLight position={[0, 20, 0]} angle={0.5} penumbra={1} intensity={2.5} color="#ff6699" />
@@ -182,7 +182,6 @@ export default function ZoltarScene({ visible, onModelStart, onModelClick }: Pro
                     modulationOffset={1}
                   />
                 </EffectComposer>
-                <Environment preset="sunset" />
                 <Preload all />
               </Suspense>
             </Canvas>
